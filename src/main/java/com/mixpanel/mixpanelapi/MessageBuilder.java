@@ -82,6 +82,27 @@ public class MessageBuilder {
         }
     }
 
+    /***
+     * Crate an alias - distinct id pair
+     * See:
+     *
+     *    https://developer.mixpanel.com/docs/http#section-creating-a-distinct_id-alias
+     *
+     * @param distinctId a string uniquely identifying the individual cause associated with this event
+     *           (for example, the user id of a signing-in user, or the hostname of a server)
+     * @param alias the alias used to connect the person with its distinct id
+     */
+    public JSONObject createAlias(String distinctId, String alias){
+        try {
+            final JSONObject aliasProperty = new JSONObject();
+            aliasProperty.put("alias", alias);
+
+            return event(distinctId, "$create_alias", aliasProperty);
+        } catch (JSONException e) {
+            throw new RuntimeException("Can't construct a Mixpanel message", e);
+        }
+    }
+
     /**
      * Sets a People Analytics property on the profile associated with
      * the given distinctId. When sent, this message will overwrite any
